@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { statusRouter } from './status.route'
+import { statusRouter } from './status.routes'
 
 const routes = Router()
 
