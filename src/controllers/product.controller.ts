@@ -56,6 +56,29 @@ class ProductController {
       })
     }
   }
+
+  async delete(request: Request, response: Response) {
+    try {
+      const { id } = request.params
+      await productService.delete(id)
+      return response.status(204).json()
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return response.status(404).send({
+          message: error.message,
+        })
+      }
+      if (error instanceof BadRequestError) {
+        return response.status(400).send({
+          message: error.message,
+        })
+      }
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
 }
 
 export { ProductController }

@@ -17,9 +17,18 @@ class ProductService {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestError('Invalid id.')
     }
-
     const product = await ProductModel.findById(id)
+    if (!product) {
+      throw new UserNotFoundError()
+    }
+    return product
+  }
 
+  async delete(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestError('Invalid id.')
+    }
+    const product = await ProductModel.findByIdAndDelete(id)
     if (!product) {
       throw new UserNotFoundError()
     }

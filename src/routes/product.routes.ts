@@ -8,5 +8,6 @@ const productController = new ProductController()
 productRouter.post('/', productController.create)
 productRouter.get('/', productController.findAll)
 productRouter.get('/:id', productController.findById)
+productRouter.delete('/:id', productController.delete)
 
 export { productRouter }
