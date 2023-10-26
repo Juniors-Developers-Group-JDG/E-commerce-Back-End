@@ -79,6 +79,34 @@ class ProductController {
       })
     }
   }
+
+  async edit(request: Request, response: Response) {
+    const productId = request.params.id
+
+    const productUpdate = request.body
+
+    try {
+      if (typeof productUpdate.amount !== 'number') {
+        return response
+          .status(400)
+          .json({ error: 'A quantidade deve ser um número.' })
+      }
+
+      const product = await productService.findByIdAndUpdate(
+        productId,
+        productUpdate,
+      )
+
+      console.log(product)
+
+      return response.json(product)
+    } catch (error) {
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
 }
 
 export { ProductController }
