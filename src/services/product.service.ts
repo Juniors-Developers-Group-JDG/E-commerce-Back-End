@@ -9,6 +9,12 @@ class ProductService {
   async findAll() {
     return await ProductModel.find()
   }
+
+  async findByIdAndUpdate(productId: string, productUpdated: IProduct) {
+    return await ProductModel.findByIdAndUpdate(productId, productUpdated, {
+      new: true,
+    })
+  }
 }
 
 export { ProductService }
