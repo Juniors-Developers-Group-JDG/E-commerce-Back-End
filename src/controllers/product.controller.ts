@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { ProductService } from '../services/product.service'
+import { UserNotFoundError } from '../errors/userNotFoundError'
+import { BadRequestError } from '../errors/badRequestError'
 import { config } from 'dotenv'
 import { cloudinary } from '../storage/cloudinary'
 import { v4 as uuid } from 'uuid'
@@ -32,6 +34,80 @@ class ProductController {
       const user = await productService.findAll()
 
       return response.json(user)
+    } catch (error) {
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
+
+  async findById(request: Request, response: Response) {
+    try {
+      const { id } = request.params
+      const product = await productService.findById(id)
+      return response.json(product)
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return response.status(404).send({
+          message: error.message,
+        })
+      }
+      if (error instanceof BadRequestError) {
+        return response.status(400).send({
+          message: error.message,
+        })
+      }
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
+
+  async delete(request: Request, response: Response) {
+    try {
+      const { id } = request.params
+      await productService.delete(id)
+      return response.status(204).json()
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return response.status(404).send({
+          message: error.message,
+        })
+      }
+      if (error instanceof BadRequestError) {
+        return response.status(400).send({
+          message: error.message,
+        })
+      }
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
+
+  async edit(request: Request, response: Response) {
+    const productId = request.params.id
+
+    const productUpdate = request.body
+
+    try {
+      if (typeof productUpdate.amount !== 'number') {
+        return response
+          .status(400)
+          .json({ error: 'A quantidade deve ser um número.' })
+      }
+
+      const product = await productService.findByIdAndUpdate(
+        productId,
+        productUpdate,
+      )
+
+      console.log(product)
+
+      return response.json(product)
     } catch (error) {
       return response.status(500).send({
         error: 'Internal Server Error!',
