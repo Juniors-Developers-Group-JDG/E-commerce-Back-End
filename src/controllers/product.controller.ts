@@ -5,7 +5,7 @@ import { BadRequestError } from '../errors/badRequestError'
 import { config } from 'dotenv'
 import { cloudinary } from '../storage/cloudinary'
 import { v4 as uuid } from 'uuid'
-import { IFile } from '../types/product'
+import { IFile, IProduct } from '../types/product'
 import { UploadApiResponse } from 'cloudinary'
 import { deleteAllFilesInDir } from '../utils'
 
@@ -119,8 +119,17 @@ class ProductController {
   async uploadImages(request: Request, response: Response) {
     try {
       const files = request.files as []
-
       const { productId } = request.params
+      const product = {} as IProduct
+
+      try {
+        const productResponse = await productService.findById(productId)
+        Object.assign(product, productResponse._doc)
+      } catch (error) {
+        return response.status(400).json({
+          message: 'product not found',
+        })
+      }
 
       if (files.length < 1) {
         return response.status(400).json({
@@ -139,9 +148,17 @@ class ProductController {
         const responseUploadFiles: UploadApiResponse[] =
           await Promise.all(imagesPromise)
 
+        const urlImages = responseUploadFiles.map((image) => image.secure_url)
+
+        product.images = urlImages
+
+        productService.findByIdAndUpdate(product._id.toString(), product)
+
         await deleteAllFilesInDir('./src/uploads')
 
-        return response.send()
+        return response.status(201).json({
+          message: 'image uploaded successfully',
+        })
       } catch (error) {
         return response.status(500).send({
           error: 'Failed to upload images',

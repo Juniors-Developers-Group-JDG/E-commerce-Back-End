@@ -1,5 +1,6 @@
 export interface IProduct {
-  id: string
+  _id?: string
+  id?: string
   name: string
   description: string
   price: number
@@ -8,6 +9,7 @@ export interface IProduct {
   discount: number
   category: string[]
   created_at: Date
+  _doc: IProduct
 }
 
 export interface IFile {
