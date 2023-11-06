@@ -178,6 +178,104 @@
           }
         }
       }
+    },
+    "/products/images/:productId": {
+      "post": {
+        "tags": ["Products"],
+        "summary": "Image Upload Product",
+        "description": "Realiza o upload de imagens para um produto",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/products/:id": {
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a single product",
+        "description": "Deleta um único produto baseado no ID da URl",
+        "responses": {
+          "204": {
+            "description": "No body"
+          }
+        }
+      }
+    },
+    "/edit/:id": {
+      "patch": {
+        "tags": ["Products"],
+        "summary": "Edit a single product",
+        "description": "Edita um único produto baseado no ID da URl",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "amount": {
+                    "type": "integer"
+                  },
+                  "discount": {
+                    "type": "integer"
+                  },
+                  "category": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      }
     }
   }
 }
