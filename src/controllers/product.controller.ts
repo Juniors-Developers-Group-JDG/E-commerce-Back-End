@@ -150,7 +150,9 @@ class ProductController {
 
         const urlImages = responseUploadFiles.map((image) => image.secure_url)
 
-        product.images = urlImages
+        const productImages = [...product.images, ...urlImages]
+
+        product.images = productImages
 
         productService.findByIdAndUpdate(product._id.toString(), product)
 
