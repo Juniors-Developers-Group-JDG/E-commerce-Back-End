@@ -105,8 +105,6 @@ class ProductController {
         productUpdate,
       )
 
-      console.log(product)
-
       return response.json(product)
     } catch (error) {
       return response.status(500).send({
@@ -167,6 +165,19 @@ class ProductController {
           message: error,
         })
       }
+    } catch (error) {
+      return response.status(500).send({
+        error: 'Internal Server Error!',
+        message: error,
+      })
+    }
+  }
+
+  async findByProductAndPopulate(request: Request, response: Response) {
+    const { productId } = request.params
+    try {
+      const product = await productService.findByProductAndPopulate(productId)
+      return response.json(product)
     } catch (error) {
       return response.status(500).send({
         error: 'Internal Server Error!',
