@@ -18,9 +18,11 @@ class ProductController {
     try {
       const productInfo = request.body
 
-      await productService.create(productInfo)
+      const newProduct = await productService.create(productInfo)
 
-      return response.status(201).json()
+      return response
+        .status(201)
+        .json({ message: 'Produto Criado com sucesso!', newProduct })
     } catch (error) {
       return response.status(500).send({
         error: 'Internal Server Error!',
