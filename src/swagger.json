@@ -276,6 +276,59 @@
           }
         }
       }
+    },
+    "/users/register/": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register a user",
+        "description": "Endpoint para o registro de novos usuários no site",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "puchaseHistory": [
+                    {
+                      "purchaseDate": {
+                        "type": "string"
+                      },
+                      "item": [
+                        {
+                          "productId": { "type": "string" },
+                          "productName": { "type": "string" },
+                          "quantity": { "type": "integer" },
+                          "price": { "type": "integer" }
+                        }
+                      ],
+                      "totalAmount": { "type": "integer" }
+                    }
+                  ],
+                  "profilePhoto": { "type": "string" },
+                  "created_at": { "type": "Date" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
     }
   }
 }
