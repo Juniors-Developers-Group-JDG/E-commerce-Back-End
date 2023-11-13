@@ -9,6 +9,14 @@ class ReviewController {
       const { productId } = request.params
       const reviewInfo = request.body
 
+      const reviewNote = reviewInfo.rating
+
+      if (!(reviewNote >= 0 && reviewNote <= 5)) {
+        return response.status(500).send({
+          message: 'A Avalição deve ser um número entre 0 e 5',
+        })
+      }
+
       await reviewService.create(productId, reviewInfo)
 
       return response.status(201).json()
