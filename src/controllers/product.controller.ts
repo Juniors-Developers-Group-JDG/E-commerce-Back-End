@@ -8,6 +8,8 @@ import { v4 as uuid } from 'uuid'
 import { IFile, IProduct } from '../types/product'
 import { UploadApiResponse } from 'cloudinary'
 import { deleteAllFilesInDir } from '../utils'
+import { ProductValidation } from '../validations/product.validation'
+import * as Yup from 'yup'
 
 config()
 
@@ -17,6 +19,21 @@ class ProductController {
   async create(request: Request, response: Response) {
     try {
       const productInfo = request.body
+
+      try {
+        await ProductValidation.validate(productInfo, { abortEarly: false })
+      } catch (error) {
+        const yupError = error as Yup.ValidationError
+        const allErrors = {}
+
+        yupError.inner.forEach((error) => {
+          allErrors[error.path] = error.message
+        })
+
+        return response.status(404).send({
+          error: allErrors,
+        })
+      }
 
       const newProduct = await productService.create(productInfo)
 
