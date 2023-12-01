@@ -40,6 +40,10 @@ class ProductService {
       new: true,
     })
   }
+
+  async findByProductAndPopulate(productId: string) {
+    return await ProductModel.findById(productId).populate('reviews')
+  }
 }
 
 export { ProductService }
