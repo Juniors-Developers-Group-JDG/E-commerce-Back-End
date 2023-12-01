@@ -417,9 +417,6 @@
           }
         }
       }
-    }
-  }
-}
     },
     "/users/register/": {
       "post": {
