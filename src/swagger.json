@@ -470,6 +470,37 @@
           }
         }
       }
+    },
+    "/users/login/": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Sign in a user",
+        "description": "Endpoint para o login de usuários no site",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged In"
+          }
+        }
+      }
     }
   }
 }
