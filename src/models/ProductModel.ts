@@ -17,6 +17,7 @@ const ProductSchema = new Schema<IProduct>(
       type: Date,
       default: Date.now,
     },
+    reviews: [{ type: Schema.Types.ObjectId, ref: 'Reviews' }],
   },
   { versionKey: false },
 )
