@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services/user.service'
 import bcrypt from 'bcrypt'
-import { createUserToken } from '../utils/createUserToken'
 
 const userService = new UserService()
 
@@ -69,8 +68,6 @@ class UserController {
 
     if (!checkPassword)
       return response.status(422).json({ message: 'Senha incorreta' })
-
-    await createUserToken(user, request, response)
   }
 }
 
