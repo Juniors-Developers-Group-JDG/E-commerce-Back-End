@@ -1,3 +1,5 @@
+import { IReview } from './review'
+
 export interface IProduct {
   _id?: string
   id?: string
@@ -10,6 +12,7 @@ export interface IProduct {
   category: string[]
   created_at: Date
   _doc: IProduct
+  reviews?: IReview[] // Adicionamos a propriedade de avaliações
 }
 
 export interface IFile {
