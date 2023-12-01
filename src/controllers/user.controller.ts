@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services/user.service'
+import jwt from 'jsonwebtoken'
+import { config } from 'dotenv'
 import bcrypt from 'bcrypt'
+
+config()
 
 const userService = new UserService()
 
@@ -68,6 +72,15 @@ class UserController {
 
     if (!checkPassword)
       return response.status(422).json({ message: 'Senha incorreta' })
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        id: user._id,
+      },
+      `${process.env.JWT_SECRET}`,
+    )
+    response.status(200).json({ token, userId: user._id })
   }
 }
 
