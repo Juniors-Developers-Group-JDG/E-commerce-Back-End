@@ -277,6 +277,147 @@
         }
       }
     },
+    "/products/with-reviews/{productId}": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get all products with reviews",
+        "description": "Retorna todos os produtos cadastrados com suas respectivas reviews",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna todos os produtos cadastrados com suas respectivas reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "integer"
+                      },
+                      "images": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "amount": {
+                        "type": "integer"
+                      },
+                      "discount": {
+                        "type": "integer"
+                      },
+                      "category": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "reviews": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "rating": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}/reviews": {
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Create a review for a product",
+        "description": "Cria uma avaliação para um produto específico",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID do produto",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "integer",
+                    "description": "Avaliação do produto (1 a 5)"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "Comentário sobre o produto"
+                  }
+                },
+                "required": ["rating"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Avaliação criada com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida. Certifique-se de fornecer uma avaliação válida."
+          },
+          "404": {
+            "description": "Produto não encontrado. Certifique-se de fornecer um ID de produto válido."
+          }
+        }
+      }
+    },
     "/users/register/": {
       "post": {
         "tags": ["Users"],
@@ -326,6 +467,37 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/users/login/": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Sign in a user",
+        "description": "Endpoint para o login de usuários no site",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged In"
           }
         }
       }

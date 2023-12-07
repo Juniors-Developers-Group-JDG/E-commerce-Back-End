@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { UserService } from '../services/user.service'
+import jwt from 'jsonwebtoken'
+import { config } from 'dotenv'
 import bcrypt from 'bcrypt'
+
+config()
 
 const userService = new UserService()
 
@@ -46,6 +50,37 @@ class UserController {
         message: error,
       })
     }
+  }
+
+  async login(request: Request, response: Response) {
+    const { email, password } = request.body
+
+    if (!email)
+      return response.status(422).json({ message: 'O e-mail é obrigatório' })
+    if (!password)
+      return response.status(422).json({ message: 'A senha é obrigatória' })
+
+    // check if user exists
+    const user = await userService.findOne({ email })
+    if (!user)
+      return response
+        .status(422)
+        .json({ message: 'Não há usuário cadastrado com este e-mail' })
+
+    // check if password match with db password
+    const checkPassword = await bcrypt.compare(password, user.password)
+
+    if (!checkPassword)
+      return response.status(422).json({ message: 'Senha incorreta' })
+
+    const token = jwt.sign(
+      {
+        email: user.email,
+        id: user._id,
+      },
+      `${process.env.JWT_SECRET}`,
+    )
+    response.status(200).json({ token, userId: user._id })
   }
 }
 
