@@ -17,4 +17,10 @@ productRouter.delete('/:id', productController.delete)
 productRouter.post('/create/', productController.create)
 productRouter.patch('/edit/:id', productController.edit)
 
+// Nova rota para buscar um produto com avaliações usando populate
+productRouter.get(
+  '/with-reviews/:productId',
+  productController.findByProductAndPopulate,
+)
+
 export { productRouter }
