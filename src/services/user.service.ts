@@ -11,6 +11,11 @@ class UserService {
     const ifExists = await UserModel.findOne(query)
     return ifExists
   }
+
+  async find(query: object) {
+    const user = await UserModel.find(query)
+    return user
+  }
 }
 
 export { UserService }
