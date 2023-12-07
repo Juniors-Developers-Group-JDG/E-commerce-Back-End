@@ -5,9 +5,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 interface IDecoded {
-  value: string
+  email: string
+  id: string
   iat: number
-  exp: number
 }
 
 const userService = new UserService()
@@ -32,21 +32,20 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: 'prefix invalid' })
     }
 
-    jwt.verify(token, `${process.env.SECRET_JWT}`, async (error, decoded) => {
+    jwt.verify(token, `${process.env.JWT_SECRET}`, async (error, decoded) => {
       if (error) {
         return res.status(401).send({ message: 'Token invalid!' })
       }
-      const { value } = decoded as unknown as IDecoded
+      const { id, email } = decoded as unknown as IDecoded
 
-      const user = await userService.findOne({
-        id: value,
+      const user = await userService.find({
+        id,
+        email,
       })
 
-      if (!user || !user.id) {
+      if (!user) {
         return res.status(401).json({ message: 'Invalid token!' })
       }
-
-      req.body.user_id = user.id
 
       return next()
     })
