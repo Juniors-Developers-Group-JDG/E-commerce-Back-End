@@ -8,5 +8,7 @@ const userController = new UserController()
 
 userRouter.post('/register/', userController.register)
 userRouter.post('/login/', userController.login)
+userRouter.post('/send-mail-password', userController.forgotPassword)
+userRouter.patch('/recover-password/:id', userController.changePassword)
 
 export { userRouter }
