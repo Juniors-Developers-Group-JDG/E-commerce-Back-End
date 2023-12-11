@@ -11,6 +11,12 @@ class UserService {
     const ifExists = await UserModel.findOne(query)
     return ifExists
   }
+
+  async updateUserFields(userId: string, fieldsToUpdate: Partial<IUser>) {
+    return await UserModel.findByIdAndUpdate(userId, fieldsToUpdate, {
+      new: true,
+    })
+  }
 }
 
 export { UserService }
