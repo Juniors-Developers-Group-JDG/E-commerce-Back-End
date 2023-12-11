@@ -82,6 +82,48 @@ class UserController {
     )
     response.status(200).json({ token, userId: user._id })
   }
+
+  async forgotPassword(request: Request, response: Response) {
+    const { email } = request.body
+
+    if (!email)
+      return response.status(422).json({ message: 'O e-mail é obrigatório' })
+
+    const user = await userService.findOne({ email })
+
+    if (!user)
+      return response
+        .status(422)
+        .json({ message: 'Não há usuário cadastrado com este e-mail' })
+
+    response
+      .status(200)
+      .json({ message: 'Usuário encontrado', id: user._id, email: user.email })
+  }
+
+  async changePassword(request: Request, response: Response) {
+    const id = request.params.id
+
+    const user = await userService.findOne({ id })
+
+    if (!user)
+      return response.status(422).json({ message: 'Usuário não encontrado' })
+
+    const { password } = request.body
+
+    const salt = await bcrypt.genSalt(12)
+    const passwordHash = await bcrypt.hash(password, salt)
+
+    try {
+      const newUser = await userService.updateUserFields(id, {
+        password: passwordHash,
+      })
+
+      response.json(newUser)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 export { UserController }
